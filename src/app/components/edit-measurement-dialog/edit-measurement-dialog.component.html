@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>Edit Measurement</h2>
+<mat-dialog-content>
+  <form [formGroup]="editForm" class="edit-form">
+    <div class="form-grid">
+      <mat-form-field>
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Neck</mat-label>
+        <input matInput type="number" step="0.1" formControlName="neck">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Upper Arm</mat-label>
+        <input matInput type="number" step="0.1" formControlName="upperArm">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Chest</mat-label>
+        <input matInput type="number" step="0.1" formControlName="chest">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Waist</mat-label>
+        <input matInput type="number" step="0.1" formControlName="waist">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Hips</mat-label>
+        <input matInput type="number" step="0.1" formControlName="hips">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Wrist</mat-label>
+        <input matInput type="number" step="0.1" formControlName="wrist">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Thighs</mat-label>
+        <input matInput type="number" step="0.1" formControlName="thighs">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Calves</mat-label>
+        <input matInput type="number" step="0.1" formControlName="calves">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Ankles</mat-label>
+        <input matInput type="number" step="0.1" formControlName="ankles">
+        <span matSuffix>inches</span>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()">Save</button>
+</mat-dialog-actions>

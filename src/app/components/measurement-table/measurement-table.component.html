@@ -1,68 +1,79 @@
 <div class="table-container">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <!-- Date Column -->
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef> Date </th>
-        <td mat-cell *matCellDef="let element"> {{formatDate(element.date)}} </td>
-      </ng-container>
-  
-      <!-- Measurement Columns -->
-      <ng-container matColumnDef="neck">
-        <th mat-header-cell *matHeaderCellDef> Neck </th>
-        <td mat-cell *matCellDef="let element"> {{element.neck}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="upperArm">
-        <th mat-header-cell *matHeaderCellDef> Upper Arm </th>
-        <td mat-cell *matCellDef="let element"> {{element.upperArm}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="chest">
-        <th mat-header-cell *matHeaderCellDef> Chest </th>
-        <td mat-cell *matCellDef="let element"> {{element.chest}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="waist">
-        <th mat-header-cell *matHeaderCellDef> Waist </th>
-        <td mat-cell *matCellDef="let element"> {{element.waist}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="hips">
-        <th mat-header-cell *matHeaderCellDef> Hips </th>
-        <td mat-cell *matCellDef="let element"> {{element.hips}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="wrist">
-        <th mat-header-cell *matHeaderCellDef> Wrist </th>
-        <td mat-cell *matCellDef="let element"> {{element.wrist}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="thighs">
-        <th mat-header-cell *matHeaderCellDef> Thighs </th>
-        <td mat-cell *matCellDef="let element"> {{element.thighs}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="calves">
-        <th mat-header-cell *matHeaderCellDef> Calves </th>
-        <td mat-cell *matCellDef="let element"> {{element.calves}} </td>
-      </ng-container>
-  
-      <ng-container matColumnDef="ankles">
-        <th mat-header-cell *matHeaderCellDef> Ankles </th>
-        <td mat-cell *matCellDef="let element"> {{element.ankles}} </td>
-      </ng-container>
-  
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button color="warn" (click)="deleteMeasurement(element.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </div>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let element">{{ formatDate(element.date) }}</td>
+    </ng-container>
+
+    <!-- Measurement Columns -->
+    <ng-container matColumnDef="neck">
+      <th mat-header-cell *matHeaderCellDef>Neck</th>
+      <td mat-cell *matCellDef="let element">{{ element.neck }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="upperArm">
+      <th mat-header-cell *matHeaderCellDef>Upper Arm</th>
+      <td mat-cell *matCellDef="let element">{{ element.upperArm }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="chest">
+      <th mat-header-cell *matHeaderCellDef>Chest</th>
+      <td mat-cell *matCellDef="let element">{{ element.chest }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="waist">
+      <th mat-header-cell *matHeaderCellDef>Waist</th>
+      <td mat-cell *matCellDef="let element">{{ element.waist }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="hips">
+      <th mat-header-cell *matHeaderCellDef>Hips</th>
+      <td mat-cell *matCellDef="let element">{{ element.hips }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="wrist">
+      <th mat-header-cell *matHeaderCellDef>Wrist</th>
+      <td mat-cell *matCellDef="let element">{{ element.wrist }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="thighs">
+      <th mat-header-cell *matHeaderCellDef>Thighs</th>
+      <td mat-cell *matCellDef="let element">{{ element.thighs }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="calves">
+      <th mat-header-cell *matHeaderCellDef>Calves</th>
+      <td mat-cell *matCellDef="let element">{{ element.calves }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ankles">
+      <th mat-header-cell *matHeaderCellDef>Ankles</th>
+      <td mat-cell *matCellDef="let element">{{ element.ankles }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="editMeasurement(element)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteMeasurement(element.id)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

@@ -14,6 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +22,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MeasurementFormComponent } from './components/measurement-form/measurement-form.component';
 import { MeasurementTableComponent } from './components/measurement-table/measurement-table.component';
 import { ProgressChartComponent } from './components/progress-chart/progress-chart.component';
+import { EditMeasurementDialogComponent } from './components/edit-measurement-dialog/edit-measurement-dialog.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { ProgressChartComponent } from './components/progress-chart/progress-cha
     DashboardComponent,
     MeasurementFormComponent,
     MeasurementTableComponent,
-    ProgressChartComponent
+    ProgressChartComponent,
+    EditMeasurementDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import { ProgressChartComponent } from './components/progress-chart/progress-cha
     MatToolbarModule,
     MatGridListModule,
     MatIconModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

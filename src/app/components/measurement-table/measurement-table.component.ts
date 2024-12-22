@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { MeasurementService } from '../../services/measurement.service';
 import { Measurement } from '../../models/measurement';
+import { EditMeasurementDialogComponent } from '../edit-measurement-dialog/edit-measurement-dialog.component';
 
 @Component({
   selector: 'app-measurement-table',
@@ -12,13 +14,29 @@ export class MeasurementTableComponent implements OnInit {
   displayedColumns: string[] = ['date', 'neck', 'upperArm', 'chest', 'waist', 'hips', 'wrist', 'thighs', 'calves', 'ankles', 'actions'];
   dataSource = new MatTableDataSource<Measurement>();
 
-  constructor(private measurementService: MeasurementService) {}
+  constructor(
+    private measurementService: MeasurementService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.measurementService.getMeasurements().subscribe(measurements => {
       this.dataSource.data = measurements.sort((a, b) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
+    });
+  }
+
+  editMeasurement(measurement: Measurement): void {
+    const dialogRef = this.dialog.open(EditMeasurementDialogComponent, {
+      width: '800px',
+      data: { ...measurement }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.measurementService.updateMeasurement(result);
+      }
     });
   }
 

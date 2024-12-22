@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Measurement } from '../models/measurement';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MeasurementService {
   private readonly STORAGE_KEY = 'body-measurements';
@@ -19,7 +19,7 @@ export class MeasurementService {
     if (saved) {
       this.measurements = JSON.parse(saved).map((m: any) => ({
         ...m,
-        date: new Date(m.date)
+        date: new Date(m.date),
       }));
       this.measurementsSubject.next(this.measurements);
     }
@@ -33,14 +33,25 @@ export class MeasurementService {
     const newMeasurement = {
       ...measurement,
       id: Date.now(),
-      date: new Date(measurement.date)
+      date: new Date(measurement.date),
     };
     this.measurements.push(newMeasurement);
     this.saveMeasurements();
   }
 
+  updateMeasurement(measurement: Measurement): void {
+    const index = this.measurements.findIndex((m) => m.id === measurement.id);
+    if (index !== -1) {
+      this.measurements[index] = {
+        ...measurement,
+        date: new Date(measurement.date),
+      };
+      this.saveMeasurements();
+    }
+  }
+
   deleteMeasurement(id: number): void {
-    this.measurements = this.measurements.filter(m => m.id !== id);
+    this.measurements = this.measurements.filter((m) => m.id !== id);
     this.saveMeasurements();
   }
 
