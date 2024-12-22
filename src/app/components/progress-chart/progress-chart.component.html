@@ -1,1 +1,23 @@
-<p>progress-chart works!</p>
+<div class="chart-container">
+    <div class="measurement-toggles">
+      <button mat-stroked-button
+              *ngFor="let measurement of measurementTypes"
+              [class.selected]="isMeasurementSelected(measurement.id)"
+              (click)="toggleMeasurement(measurement.id)"
+              [style.borderColor]="measurement.color">
+        {{ measurement.name }}
+      </button>
+    </div>
+  
+    <div class="chart-wrapper">
+      <canvas *ngIf="chartData.datasets.length > 0"
+              baseChart
+              [data]="chartData"
+              [options]="chartOptions"
+              type="line">
+      </canvas>
+      <div *ngIf="chartData.datasets.length === 0" class="no-data">
+        No measurements recorded yet. Add some measurements to see your progress!
+      </div>
+    </div>
+  </div>
