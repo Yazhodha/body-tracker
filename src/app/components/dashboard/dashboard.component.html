@@ -3,18 +3,25 @@
 </mat-toolbar>
 
 <div class="dashboard-container">
-  <!-- Settings Section -->
-  <div class="settings-section">
+  <!-- Settings Row -->
+  <div class="settings-row">
     <app-weight-unit-toggle></app-weight-unit-toggle>
     <app-height-settings></app-height-settings>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content">
-    <!-- Weight Section -->
-    <section class="weight-section">
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Left Column -->
+    <div class="left-column">
+      <!-- Weight Entry and History -->
       <app-weight-tracking></app-weight-tracking>
-      
+      <!-- Body Measurements Form -->
+      <app-measurement-form></app-measurement-form>
+    </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      <!-- Weight Progress Chart -->
       <mat-card>
         <mat-card-header>
           <mat-card-title>Weight Progress</mat-card-title>
@@ -23,12 +30,8 @@
           <app-progress-chart [chartType]="'weight'"></app-progress-chart>
         </mat-card-content>
       </mat-card>
-    </section>
 
-    <!-- Body Measurements Section -->
-    <section class="measurements-section">
-      <app-measurement-form></app-measurement-form>
-      
+      <!-- Body Measurements Progress Chart -->
       <mat-card>
         <mat-card-header>
           <mat-card-title>Body Measurements Progress</mat-card-title>
@@ -37,15 +40,18 @@
           <app-progress-chart [chartType]="'measurements'"></app-progress-chart>
         </mat-card-content>
       </mat-card>
+    </div>
+  </div>
 
-      <mat-card class="table-card">
-        <mat-card-header>
-          <mat-card-title>Measurement History</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <app-measurement-table></app-measurement-table>
-        </mat-card-content>
-      </mat-card>
-    </section>
+  <!-- Full Width Table Section -->
+  <div class="table-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Measurement History</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-measurement-table></app-measurement-table>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

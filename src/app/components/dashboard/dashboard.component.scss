@@ -1,10 +1,10 @@
 .dashboard-container {
   padding: 20px;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
-.settings-section {
+.settings-row {
   display: flex;
   gap: 20px;
   align-items: center;
@@ -12,67 +12,56 @@
   flex-wrap: wrap;
 }
 
-.main-content {
+.content-grid {
   display: grid;
-  gap: 32px;
+  gap: 20px;
+  margin-bottom: 24px;
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
 }
 
-.weight-section,
-.measurements-section {
+.left-column,
+.right-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
+.table-section {
+  margin-top: 20px;
+}
+
 mat-card {
   width: 100%;
+  margin-bottom: 0; // Remove default margin
 }
 
-.table-card {
-  overflow: hidden;
-  
-  mat-card-content {
-    padding: 0; // Allow table to extend to edges
-  }
-}
-
-// Medium screens and up
-@media (min-width: 768px) {
+// Handle smaller screens
+@media (max-width: 1023px) {
   .dashboard-container {
-    padding: 32px;
+    padding: 16px;
   }
 
-  .settings-section {
-    margin-bottom: 32px;
+  .settings-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .content-grid {
+    grid-template-columns: 1fr;
   }
 }
 
 // Large screens
 @media (min-width: 1200px) {
-  .main-content {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-
-  .measurements-section {
-    grid-column: span 2; // Take full width for measurements section
-  }
-}
-
-// Handle smaller screens
-@media (max-width: 767px) {
   .dashboard-container {
-    padding: 16px;
+    padding: 32px;
   }
 
-  .settings-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  mat-card {
-    mat-card-content {
-      padding: 16px;
-    }
+  .settings-row {
+    margin-bottom: 32px;
   }
 }
