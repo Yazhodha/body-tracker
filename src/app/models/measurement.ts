@@ -1,6 +1,7 @@
 export interface Measurement {
     id?: number;
     date: Date;
+    weight: number;
     neck: number;
     upperArm: number;
     chest: number;

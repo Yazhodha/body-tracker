@@ -22,3 +22,24 @@
     width: 80px;
     text-align: center;
   }
+
+  .bmi-category {
+    font-size: 0.8em;
+    margin-left: 4px;
+    
+    &.underweight {
+      color: #ff9800;
+    }
+    
+    &.normal {
+      color: #4caf50;
+    }
+    
+    &.overweight {
+      color: #ff5722;
+    }
+    
+    &.obese {
+      color: #f44336;
+    }
+  }

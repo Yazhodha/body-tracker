@@ -2,16 +2,59 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Measurement } from '../models/measurement';
 
+export type WeightUnit = 'kg' | 'lb';
+
 @Injectable({
   providedIn: 'root',
 })
 export class MeasurementService {
   private readonly STORAGE_KEY = 'body-measurements';
+  private readonly HEIGHT_KEY = 'user-height';
+  private readonly WEIGHT_UNIT_KEY = 'weight-unit';
   private measurements: Measurement[] = [];
+  private height: number = 0;
   private measurementsSubject = new BehaviorSubject<Measurement[]>([]);
+  private heightSubject = new BehaviorSubject<number>(0);
+  private weightUnitSubject = new BehaviorSubject<WeightUnit>('kg');
 
   constructor() {
     this.loadMeasurements();
+    this.loadHeight();
+    this.loadWeightUnit();
+  }
+
+  private loadWeightUnit(): void {
+    const savedUnit = localStorage.getItem(this.WEIGHT_UNIT_KEY) as WeightUnit;
+    if (savedUnit) {
+      this.weightUnitSubject.next(savedUnit);
+    }
+  }
+
+  setWeightUnit(unit: WeightUnit): void {
+    localStorage.setItem(this.WEIGHT_UNIT_KEY, unit);
+    this.weightUnitSubject.next(unit);
+  }
+
+  getWeightUnit(): Observable<WeightUnit> {
+    return this.weightUnitSubject.asObservable();
+  }
+
+  private loadHeight(): void {
+    const savedHeight = localStorage.getItem(this.HEIGHT_KEY);
+    if (savedHeight) {
+      this.height = parseFloat(savedHeight);
+      this.heightSubject.next(this.height);
+    }
+  }
+
+  setHeight(height: number): void {
+    this.height = height;
+    localStorage.setItem(this.HEIGHT_KEY, height.toString());
+    this.heightSubject.next(height);
+  }
+
+  getHeight(): Observable<number> {
+    return this.heightSubject.asObservable();
   }
 
   private loadMeasurements(): void {
@@ -53,6 +96,12 @@ export class MeasurementService {
   deleteMeasurement(id: number): void {
     this.measurements = this.measurements.filter((m) => m.id !== id);
     this.saveMeasurements();
+  }
+
+  convertWeight(weight: number, fromUnit: WeightUnit, toUnit: WeightUnit): number {
+    if (fromUnit === toUnit) return weight;
+    if (fromUnit === 'lb' && toUnit === 'kg') return weight * 0.453592;
+    return weight * 2.20462; // kg to lb
   }
 
   private saveMeasurements(): void {

@@ -43,6 +43,7 @@ export class ProgressChartComponent implements OnInit {
   };
 
   measurementTypes = [
+    { id: 'weight', name: 'Weight', color: '#FF9800' },
     { id: 'neck', name: 'Neck', color: '#A4C2F4' },
     { id: 'upperArm', name: 'Upper Arm', color: '#F4B5B5' },
     { id: 'chest', name: 'Chest', color: '#FFE599' },
@@ -54,7 +55,7 @@ export class ProgressChartComponent implements OnInit {
     { id: 'ankles', name: 'Ankles', color: '#E6B8AF' }
   ];
 
-  selectedMeasurements: string[] = ['waist', 'chest', 'hips'];
+  selectedMeasurements: string[] = ['weight', 'waist', 'chest', 'hips'];
 
   constructor(private measurementService: MeasurementService) {}
 

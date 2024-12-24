@@ -23,6 +23,8 @@ import { MeasurementFormComponent } from './components/measurement-form/measurem
 import { MeasurementTableComponent } from './components/measurement-table/measurement-table.component';
 import { ProgressChartComponent } from './components/progress-chart/progress-chart.component';
 import { EditMeasurementDialogComponent } from './components/edit-measurement-dialog/edit-measurement-dialog.component';
+import { HeightSettingsComponent } from './components/height-settings/height-settings.component';
+import { WeightUnitToggleComponent } from './components/weight-unit-toggle/weight-unit-toggle.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { EditMeasurementDialogComponent } from './components/edit-measurement-di
     MeasurementFormComponent,
     MeasurementTableComponent,
     ProgressChartComponent,
-    EditMeasurementDialogComponent
+    EditMeasurementDialogComponent,
+    HeightSettingsComponent,
+    WeightUnitToggleComponent
   ],
   imports: [
     BrowserModule,
