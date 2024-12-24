@@ -12,7 +12,7 @@ export class MeasurementService {
   private readonly HEIGHT_KEY = 'user-height';
   private readonly WEIGHT_UNIT_KEY = 'weight-unit';
   private measurements: Measurement[] = [];
-  private height: number = 0;
+  private height: number = 0; // stored in inches
   private measurementsSubject = new BehaviorSubject<Measurement[]>([]);
   private heightSubject = new BehaviorSubject<number>(0);
   private weightUnitSubject = new BehaviorSubject<WeightUnit>('kg');
@@ -23,6 +23,31 @@ export class MeasurementService {
     this.loadWeightUnit();
   }
 
+  // Height methods
+  private loadHeight(): void {
+    const savedHeight = localStorage.getItem(this.HEIGHT_KEY);
+    if (savedHeight) {
+      this.height = parseFloat(savedHeight);
+      this.heightSubject.next(this.height);
+    }
+  }
+
+  setHeight(feet: number, inches: number): void {
+    const totalInches = (feet * 12) + inches;
+    this.height = totalInches;
+    localStorage.setItem(this.HEIGHT_KEY, totalInches.toString());
+    this.heightSubject.next(totalInches);
+  }
+
+  getHeight(): Observable<number> {
+    return this.heightSubject.asObservable();
+  }
+
+  getHeightInMeters(): number {
+    return this.height * 0.0254; // Convert inches to meters
+  }
+
+  // Weight unit methods
   private loadWeightUnit(): void {
     const savedUnit = localStorage.getItem(this.WEIGHT_UNIT_KEY) as WeightUnit;
     if (savedUnit) {
@@ -39,24 +64,29 @@ export class MeasurementService {
     return this.weightUnitSubject.asObservable();
   }
 
-  private loadHeight(): void {
-    const savedHeight = localStorage.getItem(this.HEIGHT_KEY);
-    if (savedHeight) {
-      this.height = parseFloat(savedHeight);
-      this.heightSubject.next(this.height);
-    }
+  // Weight conversion methods
+  convertWeight(weight: number, fromUnit: WeightUnit, toUnit: WeightUnit): number {
+    if (fromUnit === toUnit) return weight;
+    if (fromUnit === 'lb' && toUnit === 'kg') return weight * 0.453592;
+    return weight * 2.20462; // kg to lb
   }
 
-  setHeight(height: number): void {
-    this.height = height;
-    localStorage.setItem(this.HEIGHT_KEY, height.toString());
-    this.heightSubject.next(height);
+  // BMI calculation
+  calculateBMI(weightInKg: number): number | null {
+    if (!this.height) return null;
+    
+    const heightInMeters = this.getHeightInMeters();
+    return weightInKg / (heightInMeters * heightInMeters);
   }
 
-  getHeight(): Observable<number> {
-    return this.heightSubject.asObservable();
+  getBMICategory(bmi: number): string {
+    if (bmi < 18.5) return 'Underweight';
+    if (bmi < 25) return 'Normal';
+    if (bmi < 30) return 'Overweight';
+    return 'Obese';
   }
 
+  // Measurement methods
   private loadMeasurements(): void {
     const saved = localStorage.getItem(this.STORAGE_KEY);
     if (saved) {
@@ -96,12 +126,6 @@ export class MeasurementService {
   deleteMeasurement(id: number): void {
     this.measurements = this.measurements.filter((m) => m.id !== id);
     this.saveMeasurements();
-  }
-
-  convertWeight(weight: number, fromUnit: WeightUnit, toUnit: WeightUnit): number {
-    if (fromUnit === toUnit) return weight;
-    if (fromUnit === 'lb' && toUnit === 'kg') return weight * 0.453592;
-    return weight * 2.20462; // kg to lb
   }
 
   private saveMeasurements(): void {

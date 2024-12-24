@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MeasurementService } from '../../services/measurement.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-height-settings',
@@ -10,10 +11,12 @@ import { MeasurementService } from '../../services/measurement.service';
 export class HeightSettingsComponent implements OnInit {
   heightForm: FormGroup;
   showForm = false;
+  currentHeight: { feet: number, inches: number } | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private measurementService: MeasurementService
+    private measurementService: MeasurementService,
+    private snackBar: MatSnackBar
   ) {
     this.heightForm = this.fb.group({
       feet: ['', [Validators.required, Validators.min(0), Validators.max(8)]],
@@ -22,10 +25,11 @@ export class HeightSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.measurementService.getHeight().subscribe(height => {
-      if (height) {
-        const feet = Math.floor(height / 12);
-        const inches = height % 12;
+    this.measurementService.getHeight().subscribe(totalInches => {
+      if (totalInches) {
+        const feet = Math.floor(totalInches / 12);
+        const inches = totalInches % 12;
+        this.currentHeight = { feet, inches };
         this.heightForm.patchValue({ feet, inches });
       }
     });
@@ -35,9 +39,13 @@ export class HeightSettingsComponent implements OnInit {
     if (this.heightForm.valid) {
       const feet = this.heightForm.get('feet')?.value || 0;
       const inches = this.heightForm.get('inches')?.value || 0;
-      const totalInches = (feet * 12) + inches;
-      this.measurementService.setHeight(totalInches);
+      
+      this.measurementService.setHeight(feet, inches);
       this.showForm = false;
+      
+      this.snackBar.open('Height updated successfully', 'Close', {
+        duration: 3000
+      });
     }
   }
 

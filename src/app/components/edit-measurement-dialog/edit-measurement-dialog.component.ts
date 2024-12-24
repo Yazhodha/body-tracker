@@ -10,7 +10,7 @@ import { MeasurementService, WeightUnit } from 'src/app/services/measurement.ser
   styleUrls: ['./edit-measurement-dialog.component.scss']
 })
 export class EditMeasurementDialogComponent {
-  editForm!: FormGroup;
+  editForm: FormGroup;
   currentUnit: WeightUnit = 'kg';
 
   constructor(
@@ -19,34 +19,56 @@ export class EditMeasurementDialogComponent {
     private measurementService: MeasurementService,
     @Inject(MAT_DIALOG_DATA) public data: Measurement
   ) {
-    this.createForm(data);
+    this.editForm = this.createForm();
   }
 
-  private createForm(data: Measurement): void {
-    const weight = this.currentUnit === 'lb'
-      ? this.measurementService.convertWeight(data.weight, 'kg', 'lb')
-      : data.weight;
+  ngOnInit(): void {
+    // Subscribe to weight unit changes
+    this.measurementService.getWeightUnit().subscribe(unit => {
+      const oldUnit = this.currentUnit;
+      this.currentUnit = unit;
+      
+      // Convert weight value when unit changes
+      if (oldUnit !== unit) {
+        const currentWeight = this.editForm.get('weight')?.value;
+        if (currentWeight) {
+          const convertedWeight = this.measurementService.convertWeight(
+            currentWeight,
+            oldUnit,
+            unit
+          );
+          this.editForm.patchValue({ weight: convertedWeight });
+        }
+      }
+    });
+  }
 
-    this.editForm = this.fb.group({
-      id: [data.id],
-      date: [new Date(data.date), Validators.required],
+  private createForm(): FormGroup {
+    const weight = this.currentUnit === 'lb'
+      ? this.measurementService.convertWeight(this.data.weight, 'kg', 'lb')
+      : this.data.weight;
+
+    return this.fb.group({
+      id: [this.data.id],
+      date: [new Date(this.data.date), [Validators.required]],
       weight: [weight, [Validators.required, Validators.min(0)]],
-      neck: [data.neck, [Validators.required, Validators.min(0)]],
-      upperArm: [data.upperArm, [Validators.required, Validators.min(0)]],
-      chest: [data.chest, [Validators.required, Validators.min(0)]],
-      waist: [data.waist, [Validators.required, Validators.min(0)]],
-      hips: [data.hips, [Validators.required, Validators.min(0)]],
-      wrist: [data.wrist, [Validators.required, Validators.min(0)]],
-      thighs: [data.thighs, [Validators.required, Validators.min(0)]],
-      calves: [data.calves, [Validators.required, Validators.min(0)]],
-      ankles: [data.ankles, [Validators.required, Validators.min(0)]]
+      neck: [this.data.neck, [Validators.required, Validators.min(0)]],
+      upperArm: [this.data.upperArm, [Validators.required, Validators.min(0)]],
+      chest: [this.data.chest, [Validators.required, Validators.min(0)]],
+      waist: [this.data.waist, [Validators.required, Validators.min(0)]],
+      hips: [this.data.hips, [Validators.required, Validators.min(0)]],
+      wrist: [this.data.wrist, [Validators.required, Validators.min(0)]],
+      thighs: [this.data.thighs, [Validators.required, Validators.min(0)]],
+      calves: [this.data.calves, [Validators.required, Validators.min(0)]],
+      ankles: [this.data.ankles, [Validators.required, Validators.min(0)]]
     });
   }
 
   onSubmit(): void {
     if (this.editForm.valid) {
       const formValue = this.editForm.value;
-      // Convert weight back to kg for storage if needed
+      
+      // Convert weight to kg for storage if needed
       if (this.currentUnit === 'lb') {
         formValue.weight = this.measurementService.convertWeight(
           formValue.weight,
@@ -54,6 +76,7 @@ export class EditMeasurementDialogComponent {
           'kg'
         );
       }
+      
       this.dialogRef.close(formValue);
     }
   }

@@ -11,9 +11,11 @@ import { EditMeasurementDialogComponent } from '../edit-measurement-dialog/edit-
   styleUrls: ['./measurement-table.component.scss']
 })
 export class MeasurementTableComponent implements OnInit {
-  displayedColumns: string[] = ['date', 'weight', 'neck', 'upperArm', 'chest', 'waist', 'hips', 'wrist', 'thighs', 'calves', 'ankles', 'bmi', 'actions'];
+  displayedColumns: string[] = [
+    'date', 'weight', 'neck', 'upperArm', 'chest', 'waist', 
+    'hips', 'wrist', 'thighs', 'calves', 'ankles', 'bmi', 'actions'
+  ];
   dataSource = new MatTableDataSource<Measurement>();
-  height: number = 0;
   currentUnit: WeightUnit = 'kg';
 
   constructor(
@@ -22,29 +24,32 @@ export class MeasurementTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.measurementService.getHeight().subscribe(height => {
-      this.height = height;
-    });
-
-    this.measurementService.getWeightUnit().subscribe(unit => {
-      this.currentUnit = unit;
-      // Refresh table data when unit changes
-      //this.loadData();
-    });
-
+    // Subscribe to measurements
     this.measurementService.getMeasurements().subscribe(measurements => {
       this.dataSource.data = measurements.sort((a, b) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
     });
+
+    // Subscribe to weight unit changes
+    this.measurementService.getWeightUnit().subscribe(unit => {
+      this.currentUnit = unit;
+    });
   }
 
-  formatWeight(weight: number): string {
-    // Weight is stored in kg, convert if needed
+  formatWeight(weightInKg: number): string {
     const displayWeight = this.currentUnit === 'lb' 
-      ? this.measurementService.convertWeight(weight, 'kg', 'lb')
-      : weight;
-    return `${displayWeight.toFixed(1)} ${this.currentUnit}`;
+      ? this.measurementService.convertWeight(weightInKg, 'kg', 'lb')
+      : weightInKg;
+    return `${displayWeight.toFixed(1)}`;
+  }
+
+  calculateBMI(weightInKg: number): number | null {
+    return this.measurementService.calculateBMI(weightInKg);
+  }
+
+  getBMICategory(bmi: number): string {
+    return this.measurementService.getBMICategory(bmi);
   }
 
   editMeasurement(measurement: Measurement): void {
@@ -68,18 +73,5 @@ export class MeasurementTableComponent implements OnInit {
 
   formatDate(date: Date): string {
     return new Date(date).toLocaleDateString();
-  }
-
-  calculateBMI(weight: number, height?: number): number {
-    // BMI = weight(lb) / [height(inches)]2 × 703
-    const heightInInches = height; // You might want to add height to your form
-    return (weight / (heightInInches! * heightInInches!)) * 703;
-  }
-
-  getBMICategory(bmi: number): string {
-    if (bmi < 18.5) return 'Underweight';
-    if (bmi < 25) return 'Normal';
-    if (bmi < 30) return 'Overweight';
-    return 'Obese';
   }
 }
