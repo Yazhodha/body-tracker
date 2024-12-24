@@ -1,53 +1,36 @@
 .table-container {
-  overflow-x: auto;
   width: 100%;
-  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
-  min-width: 800px; // Ensure table scrolls on mobile
+  min-width: 800px;
 }
 
 th.mat-header-cell,
 td.mat-cell {
-  padding: 8px 16px;
-  
+  padding: 12px 16px;
+
   &:first-of-type {
     padding-left: 24px;
   }
-  
+
   &:last-of-type {
     padding-right: 24px;
   }
 }
 
-// Make measurements columns equal width
-[class*="mat-column-"] {
-  &:not(.mat-column-date):not(.mat-column-actions) {
-    min-width: 80px;
-  }
-}
-
-.mat-column-date {
-  min-width: 100px;
-}
-
-.mat-column-actions {
-  width: 100px;
-  text-align: center;
-}
-
-// Mobile optimizations
-@media (max-width: 1023px) {
+@media (max-width: 600px) {
   th.mat-header-cell,
   td.mat-cell {
-    padding: 8px;
-    
+    padding: 12px;
+
     &:first-of-type {
       padding-left: 16px;
     }
-    
+
     &:last-of-type {
       padding-right: 16px;
     }

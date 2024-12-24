@@ -3,16 +3,16 @@
 </mat-toolbar>
 
 <div class="dashboard-container">
-  <!-- Settings Row -->
-  <div class="settings-row">
+  <!-- Top Settings Bar -->
+  <div class="settings-bar">
     <app-weight-unit-toggle></app-weight-unit-toggle>
     <app-height-settings></app-height-settings>
   </div>
 
-  <!-- Main Content Grid -->
-  <div class="content-grid">
-    <!-- Left Column - Weight Related -->
-    <div class="left-column">
+  <!-- Mobile Section -->
+  <div class="mobile-layout">
+    <!-- Weight Section -->
+    <div class="weight-section">
       <app-weight-tracking></app-weight-tracking>
       <mat-card>
         <mat-card-header>
@@ -24,8 +24,8 @@
       </mat-card>
     </div>
 
-    <!-- Right Column - Body Measurements -->
-    <div class="right-column">
+    <!-- Body Measurements Section -->
+    <div class="measurements-section">
       <app-measurement-form></app-measurement-form>
       <mat-card>
         <mat-card-header>
