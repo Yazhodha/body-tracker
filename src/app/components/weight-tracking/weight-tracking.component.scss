@@ -1,0 +1,82 @@
+.weight-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .form-card {
+    background: #fff;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+  
+  .weight-table {
+    width: 100%;
+  }
+  
+  .bmi-category {
+    font-size: 0.8em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+  
+    &.underweight {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+  
+    &.normal {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+    }
+  
+    &.overweight {
+      background-color: #FFF3E0;
+      color: #E65100;
+    }
+  
+    &.obese {
+      background-color: #FFEBEE;
+      color: #C62828;
+    }
+  }
+  
+  // Responsive styles
+  @media (max-width: 600px) {
+    .form-row {
+      flex-direction: column;
+      gap: 8px;
+  
+      mat-form-field {
+        width: 100%;
+      }
+  
+      button[type="submit"] {
+        width: 100%;
+      }
+    }
+  }
+  
+  // Additional responsive styles for larger screens
+  @media (min-width: 1200px) {
+    .weight-section {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+  }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MeasurementService, WeightUnit } from '../../services/measurement.service';
+import { MeasurementService } from '../../services/measurement.service';
 import { Measurement } from '../../models/measurement';
 import { EditMeasurementDialogComponent } from '../edit-measurement-dialog/edit-measurement-dialog.component';
 
@@ -12,11 +12,20 @@ import { EditMeasurementDialogComponent } from '../edit-measurement-dialog/edit-
 })
 export class MeasurementTableComponent implements OnInit {
   displayedColumns: string[] = [
-    'date', 'weight', 'neck', 'upperArm', 'chest', 'waist', 
-    'hips', 'wrist', 'thighs', 'calves', 'ankles', 'bmi', 'actions'
+    'date', 
+    'neck', 
+    'upperArm', 
+    'chest', 
+    'waist', 
+    'hips', 
+    'wrist', 
+    'thighs', 
+    'calves', 
+    'ankles', 
+    'actions'
   ];
+  
   dataSource = new MatTableDataSource<Measurement>();
-  currentUnit: WeightUnit = 'kg';
 
   constructor(
     private measurementService: MeasurementService,
@@ -24,32 +33,14 @@ export class MeasurementTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Subscribe to measurements
     this.measurementService.getMeasurements().subscribe(measurements => {
-      this.dataSource.data = measurements.sort((a, b) => 
+      // Filter out weight-only entries
+      const bodyMeasurements = measurements.filter(m => this.hasMeasurements(m));
+      
+      this.dataSource.data = bodyMeasurements.sort((a, b) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
     });
-
-    // Subscribe to weight unit changes
-    this.measurementService.getWeightUnit().subscribe(unit => {
-      this.currentUnit = unit;
-    });
-  }
-
-  formatWeight(weightInKg: number): string {
-    const displayWeight = this.currentUnit === 'lb' 
-      ? this.measurementService.convertWeight(weightInKg, 'kg', 'lb')
-      : weightInKg;
-    return `${displayWeight.toFixed(1)}`;
-  }
-
-  calculateBMI(weightInKg: number): number | null {
-    return this.measurementService.calculateBMI(weightInKg);
-  }
-
-  getBMICategory(bmi: number): string {
-    return this.measurementService.getBMICategory(bmi);
   }
 
   editMeasurement(measurement: Measurement): void {
@@ -73,5 +64,20 @@ export class MeasurementTableComponent implements OnInit {
 
   formatDate(date: Date): string {
     return new Date(date).toLocaleDateString();
+  }
+
+  // Helper method to check if a measurement entry has any body measurements
+  hasMeasurements(measurement: Measurement): boolean {
+    return Boolean(
+      measurement.neck ||
+      measurement.upperArm ||
+      measurement.chest ||
+      measurement.waist ||
+      measurement.hips ||
+      measurement.wrist ||
+      measurement.thighs ||
+      measurement.calves ||
+      measurement.ankles
+    );
   }
 }

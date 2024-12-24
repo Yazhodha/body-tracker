@@ -1,0 +1,38 @@
+.edit-form {
+    padding: 16px 0;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  
+  mat-dialog-content {
+    min-width: 600px;
+  }
+  
+  mat-dialog-actions {
+    padding: 16px 0;
+  }
+  
+  // Responsive styles
+  @media (max-width: 640px) {
+    mat-dialog-content {
+      min-width: unset;
+      width: 100%;
+    }
+  
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    mat-dialog-actions {
+      flex-direction: column;
+      gap: 8px;
+  
+      button {
+        width: 100%;
+      }
+    }
+  }

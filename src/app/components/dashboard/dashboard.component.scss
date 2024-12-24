@@ -1,27 +1,78 @@
 .dashboard-container {
-    padding: 20px;
-    display: grid;
-    gap: 20px;
-    grid-template-columns: 1fr;
-  }
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.settings-section {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.main-content {
+  display: grid;
+  gap: 32px;
+}
+
+.weight-section,
+.measurements-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+mat-card {
+  width: 100%;
+}
+
+.table-card {
+  overflow: hidden;
   
-  @media (min-width: 1200px) {
-    .dashboard-container {
-      grid-template-columns: 400px 1fr;
+  mat-card-content {
+    padding: 0; // Allow table to extend to edges
+  }
+}
+
+// Medium screens and up
+@media (min-width: 768px) {
+  .dashboard-container {
+    padding: 32px;
+  }
+
+  .settings-section {
+    margin-bottom: 32px;
+  }
+}
+
+// Large screens
+@media (min-width: 1200px) {
+  .main-content {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+
+  .measurements-section {
+    grid-column: span 2; // Take full width for measurements section
+  }
+}
+
+// Handle smaller screens
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .settings-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  mat-card {
+    mat-card-content {
+      padding: 16px;
     }
   }
-  
-  .form-section {
-    position: sticky;
-    top: 20px;
-  }
-  
-  .data-section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .chart-card, .table-card {
-    width: 100%;
-  }
+}

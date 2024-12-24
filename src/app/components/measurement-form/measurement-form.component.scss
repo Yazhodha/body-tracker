@@ -1,18 +1,26 @@
 .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  
-  mat-form-field {
-    width: 100%;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+mat-card {
+  margin-bottom: 20px;
+}
+
+button[type="submit"] {
+  width: 100%;
+}
+
+@media (min-width: 600px) {
   button[type="submit"] {
-    width: 100%;
+    width: auto;
   }
-  
-  mat-card {
-    margin: 20px;
+}
+
+@media (min-width: 960px) {
+  .form-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
+}

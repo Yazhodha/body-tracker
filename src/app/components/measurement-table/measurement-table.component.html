@@ -6,28 +6,6 @@
       <td mat-cell *matCellDef="let element">{{ formatDate(element.date) }}</td>
     </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef> Weight ({{ currentUnit }}) </th>
-      <td mat-cell *matCellDef="let element"> {{ formatWeight(element.weight) }} </td>
-    </ng-container>
-
-    <!-- BMI Column -->
-    <ng-container matColumnDef="bmi">
-      <th mat-header-cell *matHeaderCellDef> BMI </th>
-      <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="calculateBMI(element.weight) as bmi">
-          {{ bmi | number:'1.1-1' }}
-          <span class="bmi-category" [ngClass]="getBMICategory(bmi).toLowerCase()">
-            ({{ getBMICategory(bmi) }})
-          </span>
-        </ng-container>
-        <span *ngIf="!calculateBMI(element.weight)">
-          Set height to view BMI
-        </span>
-      </td>
-    </ng-container>
-
     <!-- Measurement Columns -->
     <ng-container matColumnDef="neck">
       <th mat-header-cell *matHeaderCellDef>Neck</th>
@@ -78,10 +56,12 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Actions</th>
       <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" (click)="editMeasurement(element)">
+        <button mat-icon-button color="primary" (click)="editMeasurement(element)"
+                [disabled]="!hasMeasurements(element)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="deleteMeasurement(element.id)">
+        <button mat-icon-button color="warn" (click)="deleteMeasurement(element.id)"
+                [disabled]="!hasMeasurements(element)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

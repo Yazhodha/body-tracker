@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Add New Measurements</mat-card-title>
+    <mat-card-title>Body Measurements</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -9,17 +9,8 @@
         <mat-form-field>
           <mat-label>Date</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="date" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>{{ getWeightLabel() }}</mat-label>
-          <input matInput type="number" step="0.1" formControlName="weight" />
-          <span matSuffix>{{ currentUnit }}</span>
         </mat-form-field>
 
         <mat-form-field>

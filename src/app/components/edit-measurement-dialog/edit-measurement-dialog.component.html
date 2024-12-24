@@ -1,10 +1,10 @@
-<h2 mat-dialog-title>Edit Measurement</h2>
+<h2 mat-dialog-title>Edit Body Measurements</h2>
 <mat-dialog-content>
   <form [formGroup]="editForm" class="edit-form">
     <div class="form-grid">
       <mat-form-field>
         <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date" />
+        <input matInput [matDatepicker]="picker" formControlName="date">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error *ngIf="editForm.get('date')?.errors?.['required']">
@@ -13,69 +13,84 @@
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Weight ({{ currentUnit }})</mat-label>
-        <input matInput type="number" step="0.1" formControlName="weight" />
-        <span matSuffix>{{ currentUnit }}</span>
-        <mat-error *ngIf="editForm.get('weight')?.errors?.['required']">
-          Weight is required
-        </mat-error>
-        <mat-error *ngIf="editForm.get('weight')?.errors?.['min']">
-          Weight must be greater than 0
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field>
         <mat-label>Neck</mat-label>
-        <input matInput type="number" step="0.1" formControlName="neck" />
+        <input matInput type="number" step="0.1" formControlName="neck">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('neck')?.errors?.['required']">
+          Neck is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Upper Arm</mat-label>
-        <input matInput type="number" step="0.1" formControlName="upperArm" />
+        <input matInput type="number" step="0.1" formControlName="upperArm">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('upperArm')?.errors?.['required']">
+          Upper arm is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Chest</mat-label>
-        <input matInput type="number" step="0.1" formControlName="chest" />
+        <input matInput type="number" step="0.1" formControlName="chest">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('chest')?.errors?.['required']">
+          Chest is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Waist</mat-label>
-        <input matInput type="number" step="0.1" formControlName="waist" />
+        <input matInput type="number" step="0.1" formControlName="waist">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('waist')?.errors?.['required']">
+          Waist is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Hips</mat-label>
-        <input matInput type="number" step="0.1" formControlName="hips" />
+        <input matInput type="number" step="0.1" formControlName="hips">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('hips')?.errors?.['required']">
+          Hips is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Wrist</mat-label>
-        <input matInput type="number" step="0.1" formControlName="wrist" />
+        <input matInput type="number" step="0.1" formControlName="wrist">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('wrist')?.errors?.['required']">
+          Wrist is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Thighs</mat-label>
-        <input matInput type="number" step="0.1" formControlName="thighs" />
+        <input matInput type="number" step="0.1" formControlName="thighs">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('thighs')?.errors?.['required']">
+          Thighs is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Calves</mat-label>
-        <input matInput type="number" step="0.1" formControlName="calves" />
+        <input matInput type="number" step="0.1" formControlName="calves">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('calves')?.errors?.['required']">
+          Calves is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Ankles</mat-label>
-        <input matInput type="number" step="0.1" formControlName="ankles" />
+        <input matInput type="number" step="0.1" formControlName="ankles">
         <span matSuffix>inches</span>
+        <mat-error *ngIf="editForm.get('ankles')?.errors?.['required']">
+          Ankles is required
+        </mat-error>
       </mat-form-field>
     </div>
   </form>

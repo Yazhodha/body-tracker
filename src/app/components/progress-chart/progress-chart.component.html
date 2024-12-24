@@ -1,43 +1,33 @@
 <div class="chart-container">
   <!-- Weight Chart -->
-  <mat-card class="chart-card">
-    <mat-card-header>
-      <mat-card-title>Weight Progress</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <canvas *ngIf="weightChartData.datasets.length > 0"
-              baseChart
-              #weightChart="base-chart"
-              [data]="weightChartData"
-              [options]="weightChartOptions"
-              type="line">
-      </canvas>
-    </mat-card-content>
-  </mat-card>
+  <ng-container *ngIf="chartType === 'weight'">
+    <canvas *ngIf="weightChartData.datasets.length > 0"
+            baseChart
+            #weightChart="base-chart"
+            [data]="weightChartData"
+            [options]="weightChartOptions"
+            type="line">
+    </canvas>
+  </ng-container>
 
   <!-- Body Measurements Chart -->
-  <mat-card class="chart-card">
-    <mat-card-header>
-      <mat-card-title>Body Measurements Progress</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="measurement-toggles">
-        <button mat-stroked-button
-                *ngFor="let measurement of bodyMeasurementTypes"
-                [class.selected]="isMeasurementSelected(measurement.id)"
-                (click)="toggleMeasurement(measurement.id)"
-                [style.borderColor]="measurement.color">
-          {{ measurement.name }}
-        </button>
-      </div>
+  <ng-container *ngIf="chartType === 'measurements'">
+    <div class="measurement-toggles">
+      <button mat-stroked-button
+              *ngFor="let measurement of bodyMeasurementTypes"
+              [class.selected]="isMeasurementSelected(measurement.id)"
+              (click)="toggleMeasurement(measurement.id)"
+              [style.borderColor]="measurement.color">
+        {{ measurement.name }}
+      </button>
+    </div>
 
-      <canvas *ngIf="bodyChartData.datasets.length > 0"
-              baseChart
-              #bodyChart="base-chart"
-              [data]="bodyChartData"
-              [options]="bodyChartOptions"
-              type="line">
-      </canvas>
-    </mat-card-content>
-  </mat-card>
+    <canvas *ngIf="bodyChartData.datasets.length > 0"
+            baseChart
+            #bodyChart="base-chart"
+            [data]="bodyChartData"
+            [options]="bodyChartOptions"
+            type="line">
+    </canvas>
+  </ng-container>
 </div>

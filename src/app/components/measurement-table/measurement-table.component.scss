@@ -1,47 +1,51 @@
 .table-container {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+table {
+  width: 100%;
+  min-width: 1000px; // Ensures horizontal scroll on smaller screens
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  padding: 8px;
+  
+  &:first-of-type {
+    padding-left: 16px;
   }
   
-  table {
-    width: 100%;
+  &:last-of-type {
+    padding-right: 16px;
   }
-  
-  th.mat-header-cell,
-  td.mat-cell {
-    padding: 8px;
-    text-align: center;
+}
+
+.mat-column-date {
+  min-width: 100px;
+}
+
+.mat-column-actions {
+  width: 100px;
+  text-align: center;
+}
+
+// Make measurements columns equal width
+[class*="mat-column-"] {
+  &:not(.mat-column-date):not(.mat-column-actions) {
+    min-width: 80px;
   }
-  
-  th.mat-header-cell {
-    font-weight: bold;
-  }
-  
-  .mat-column-actions {
-    width: 80px;
-    text-align: center;
+}
+
+// Responsive styles
+@media (max-width: 600px) {
+  .table-container {
+    margin: 0 -16px; // Negative margin to allow full-width scroll
+    width: calc(100% + 32px);
   }
 
-  .bmi-category {
-    font-size: 0.8em;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 4px;
+  table {
+    min-width: 800px; // Slightly smaller for mobile
   }
-  .underweight {
-    background-color: #FFF3E0;
-    color: #E65100;
-  }
-  .normal {
-    background-color: #E8F5E9;
-    color: #2E7D32;
-  }
-  .overweight {
-    background-color: #FFF3E0;
-    color: #E65100;
-  }
-  .obese {
-    background-color: #FFEBEE;
-    color: #C62828;
-  }
+}

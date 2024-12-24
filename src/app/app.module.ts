@@ -25,6 +25,7 @@ import { ProgressChartComponent } from './components/progress-chart/progress-cha
 import { EditMeasurementDialogComponent } from './components/edit-measurement-dialog/edit-measurement-dialog.component';
 import { HeightSettingsComponent } from './components/height-settings/height-settings.component';
 import { WeightUnitToggleComponent } from './components/weight-unit-toggle/weight-unit-toggle.component';
+import { WeightTrackingComponent } from './components/weight-tracking/weight-tracking.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { WeightUnitToggleComponent } from './components/weight-unit-toggle/weigh
     ProgressChartComponent,
     EditMeasurementDialogComponent,
     HeightSettingsComponent,
-    WeightUnitToggleComponent
+    WeightUnitToggleComponent,
+    WeightTrackingComponent
   ],
   imports: [
     BrowserModule,

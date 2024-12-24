@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MeasurementService, WeightUnit } from '../../services/measurement.service';
 import { Chart, ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -9,6 +9,7 @@ import { BaseChartDirective } from 'ng2-charts';
   styleUrls: ['./progress-chart.component.scss']
 })
 export class ProgressChartComponent implements OnInit {
+  @Input() chartType: 'weight' | 'measurements' = 'measurements';
   @ViewChild('weightChart') weightChart?: BaseChartDirective;
   @ViewChild('bodyChart') bodyChart?: BaseChartDirective;
 
