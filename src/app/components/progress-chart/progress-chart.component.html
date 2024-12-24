@@ -1,23 +1,43 @@
 <div class="chart-container">
-    <div class="measurement-toggles">
-      <button mat-stroked-button
-              *ngFor="let measurement of measurementTypes"
-              [class.selected]="isMeasurementSelected(measurement.id)"
-              (click)="toggleMeasurement(measurement.id)"
-              [style.borderColor]="measurement.color">
-        {{ measurement.name }}
-      </button>
-    </div>
-  
-    <div class="chart-wrapper">
-      <canvas *ngIf="chartData.datasets.length > 0"
+  <!-- Weight Chart -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Weight Progress</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas *ngIf="weightChartData.datasets.length > 0"
               baseChart
-              [data]="chartData"
-              [options]="chartOptions"
+              #weightChart="base-chart"
+              [data]="weightChartData"
+              [options]="weightChartOptions"
               type="line">
       </canvas>
-      <div *ngIf="chartData.datasets.length === 0" class="no-data">
-        No measurements recorded yet. Add some measurements to see your progress!
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Body Measurements Chart -->
+  <mat-card class="chart-card">
+    <mat-card-header>
+      <mat-card-title>Body Measurements Progress</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="measurement-toggles">
+        <button mat-stroked-button
+                *ngFor="let measurement of bodyMeasurementTypes"
+                [class.selected]="isMeasurementSelected(measurement.id)"
+                (click)="toggleMeasurement(measurement.id)"
+                [style.borderColor]="measurement.color">
+          {{ measurement.name }}
+        </button>
       </div>
-    </div>
-  </div>
+
+      <canvas *ngIf="bodyChartData.datasets.length > 0"
+              baseChart
+              #bodyChart="base-chart"
+              [data]="bodyChartData"
+              [options]="bodyChartOptions"
+              type="line">
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+</div>
