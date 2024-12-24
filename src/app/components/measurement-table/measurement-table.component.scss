@@ -1,24 +1,31 @@
 .table-container {
-  width: 100%;
   overflow-x: auto;
-  margin-top: 16px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
 }
 
 table {
   width: 100%;
-  min-width: 1000px; // Ensures horizontal scroll on smaller screens
+  min-width: 800px; // Ensure table scrolls on mobile
 }
 
 th.mat-header-cell,
 td.mat-cell {
-  padding: 8px;
+  padding: 8px 16px;
   
   &:first-of-type {
-    padding-left: 16px;
+    padding-left: 24px;
   }
   
   &:last-of-type {
-    padding-right: 16px;
+    padding-right: 24px;
+  }
+}
+
+// Make measurements columns equal width
+[class*="mat-column-"] {
+  &:not(.mat-column-date):not(.mat-column-actions) {
+    min-width: 80px;
   }
 }
 
@@ -31,21 +38,18 @@ td.mat-cell {
   text-align: center;
 }
 
-// Make measurements columns equal width
-[class*="mat-column-"] {
-  &:not(.mat-column-date):not(.mat-column-actions) {
-    min-width: 80px;
-  }
-}
-
-// Responsive styles
-@media (max-width: 600px) {
-  .table-container {
-    margin: 0 -16px; // Negative margin to allow full-width scroll
-    width: calc(100% + 32px);
-  }
-
-  table {
-    min-width: 800px; // Slightly smaller for mobile
+// Mobile optimizations
+@media (max-width: 1023px) {
+  th.mat-header-cell,
+  td.mat-cell {
+    padding: 8px;
+    
+    &:first-of-type {
+      padding-left: 16px;
+    }
+    
+    &:last-of-type {
+      padding-right: 16px;
+    }
   }
 }

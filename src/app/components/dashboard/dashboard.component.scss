@@ -18,7 +18,7 @@
   margin-bottom: 24px;
   
   @media (min-width: 1024px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(300px, 2fr) 3fr;
     align-items: start;
   }
 }
@@ -30,13 +30,16 @@
   gap: 20px;
 }
 
-.table-section {
-  margin-top: 20px;
-}
-
 mat-card {
   width: 100%;
-  margin-bottom: 0; // Remove default margin
+  margin-bottom: 0;
+}
+
+.table-card {
+  overflow-x: auto;
+  mat-card-content {
+    padding: 0;
+  }
 }
 
 // Handle smaller screens
@@ -52,6 +55,17 @@ mat-card {
 
   .content-grid {
     grid-template-columns: 1fr;
+  }
+
+  // Fix for mobile table scrolling
+  .table-card {
+    margin: 0 -16px;
+    width: calc(100% + 32px);
+    border-radius: 0;
+
+    mat-card-header {
+      padding: 0 16px;
+    }
   }
 }
 
