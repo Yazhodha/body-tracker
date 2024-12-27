@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Measurement } from '../../models/measurement';
+import { BodyMeasurement } from 'src/app/models/measurement';
 
 @Component({
   selector: 'app-edit-measurement-dialog',
@@ -14,7 +14,7 @@ export class EditMeasurementDialogComponent {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditMeasurementDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Measurement
+    @Inject(MAT_DIALOG_DATA) public data: BodyMeasurement
   ) {
     this.editForm = this.createForm();
   }
@@ -37,12 +37,7 @@ export class EditMeasurementDialogComponent {
 
   onSubmit(): void {
     if (this.editForm.valid) {
-      const formValue = this.editForm.value;
-      // Preserve the weight value from the original measurement
-      this.dialogRef.close({
-        ...formValue,
-        weight: this.data.weight
-      });
+      this.dialogRef.close(this.editForm.value);
     }
   }
 

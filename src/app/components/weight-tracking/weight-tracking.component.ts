@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { MeasurementService, WeightUnit } from '../../services/measurement.service';
-import { WeightEntry } from 'src/app/models/weight-entry';
+import { WeightEntry } from '../../models/weight-entry';
 
 @Component({
   selector: 'app-weight-tracking',
@@ -26,57 +26,37 @@ export class WeightTrackingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Subscribe to weight unit changes
     this.measurementService.getWeightUnit().subscribe(unit => {
       this.currentUnit = unit;
       this.loadWeightEntries();
     });
 
-    this.measurementService.getMeasurements().subscribe(() => {
-      this.loadWeightEntries();
-    });
+    // Initial load of weight entries
+    this.loadWeightEntries();
   }
 
   onSubmit(): void {
     if (this.weightForm.valid) {
       const formValue = this.weightForm.value;
-      
-      // Convert weight to kg if needed
-      if (this.currentUnit === 'lb') {
-        formValue.weight = this.measurementService.convertWeight(
-          formValue.weight,
-          'lb',
-          'kg'
-        );
-      }
+      const weightInKg = this.currentUnit === 'lb' 
+        ? this.measurementService.convertWeight(formValue.weight, 'lb', 'kg')
+        : formValue.weight;
 
-      this.measurementService.addMeasurement({
-        ...formValue,
-        // Add null values for other measurements
-        neck: null,
-        upperArm: null,
-        chest: null,
-        waist: null,
-        hips: null,
-        wrist: null,
-        thighs: null,
-        calves: null,
-        ankles: null
-      });
+      const entry: WeightEntry = {
+        date: formValue.date,
+        weight: weightInKg
+      };
 
+      this.measurementService.addWeightEntry(entry);
       this.weightForm.patchValue({ weight: '' });
     }
   }
 
   loadWeightEntries(): void {
-    this.measurementService.getMeasurements().subscribe(measurements => {
-      const weightEntries = measurements.map(m => ({
-        id: m.id,
-        date: new Date(m.date),
-        weight: m.weight
-      }));
-
-      this.dataSource.data = weightEntries.sort((a, b) => 
-        b.date.getTime() - a.date.getTime()
+    this.measurementService.getWeightEntries().subscribe(entries => {
+      this.dataSource.data = entries.sort((a, b) => 
+        new Date(b.date).getTime() - new Date(a.date).getTime()
       );
     });
   }
@@ -98,7 +78,7 @@ export class WeightTrackingComponent implements OnInit {
 
   deleteEntry(entry: WeightEntry): void {
     if (confirm('Are you sure you want to delete this weight entry?')) {
-      this.measurementService.deleteMeasurement(entry.id!);
+      this.measurementService.deleteWeightEntry(entry.id!);
     }
   }
 }

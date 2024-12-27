@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MeasurementService } from '../../services/measurement.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { BodyMeasurement } from 'src/app/models/measurement';
 
 @Component({
   selector: 'app-measurement-form',
@@ -36,14 +37,10 @@ export class MeasurementFormComponent {
 
   onSubmit(): void {
     if (this.measurementForm.valid) {
-      const formValue = this.measurementForm.value;
+      const measurement: BodyMeasurement = this.measurementForm.value;
       
-      // Add weight as null since it's now handled separately
-      this.measurementService.addMeasurement({
-        ...formValue,
-        weight: null
-      });
-
+      this.measurementService.addBodyMeasurement(measurement);
+      
       // Reset form except date
       this.measurementForm.reset({ date: new Date() });
       

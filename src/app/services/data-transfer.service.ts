@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { MeasurementService } from './measurement.service';
-import { Measurement } from '../models/measurement';
+import { WeightEntry } from '../models/weight-entry';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
+import { BodyMeasurement } from '../models/measurement';
 
 export interface ExportData {
   version: string;
   exportDate: string;
-  measurements: Measurement[];
+  bodyMeasurements: BodyMeasurement[];
+  weightEntries: WeightEntry[];
   weightUnit: 'kg' | 'lb';
   heightInches: number;
 }
@@ -36,21 +38,26 @@ export class DataTransferService {
 
   async exportToJson(): Promise<string> {
     try {
-      this.exportProgressSubject.next(25);
+      this.exportProgressSubject.next(20);
       
-      // Get all necessary data using firstValueFrom for one-time subscription
-      const measurements = await firstValueFrom(this.measurementService.getMeasurements());
-      this.exportProgressSubject.next(50);
+      // Get all body measurements
+      const bodyMeasurements = await firstValueFrom(this.measurementService.getBodyMeasurements());
+      this.exportProgressSubject.next(40);
       
+      // Get all weight entries
+      const weightEntries = await firstValueFrom(this.measurementService.getWeightEntries());
+      this.exportProgressSubject.next(60);
+      
+      // Get settings
       const weightUnit = await firstValueFrom(this.measurementService.getWeightUnit());
-      this.exportProgressSubject.next(75);
-      
       const heightInches = await firstValueFrom(this.measurementService.getHeight());
+      this.exportProgressSubject.next(80);
 
       const exportData: ExportData = {
         version: '1.0',
         exportDate: new Date().toISOString(),
-        measurements: measurements || [],
+        bodyMeasurements: bodyMeasurements || [],
+        weightEntries: weightEntries || [],
         weightUnit: weightUnit || 'kg',
         heightInches: heightInches || 0
       };
@@ -71,7 +78,7 @@ export class DataTransferService {
 
   async importFromJson(jsonString: string): Promise<ImportResult> {
     try {
-      this.importProgressSubject.next(25);
+      this.importProgressSubject.next(20);
       
       const data = JSON.parse(jsonString) as ExportData;
       
@@ -80,24 +87,31 @@ export class DataTransferService {
         throw new Error('Invalid data format');
       }
 
-      this.importProgressSubject.next(50);
+      this.importProgressSubject.next(40);
 
       // Convert dates from ISO strings to Date objects
-      data.measurements = data.measurements.map(m => ({
+      data.bodyMeasurements = data.bodyMeasurements.map(m => ({
         ...m,
         date: new Date(m.date)
       }));
 
-      this.importProgressSubject.next(75);
+      data.weightEntries = data.weightEntries.map(w => ({
+        ...w,
+        date: new Date(w.date)
+      }));
 
-      // Store the imported data
+      this.importProgressSubject.next(60);
+
+      // Store the settings
       this.measurementService.setWeightUnit(data.weightUnit);
       const feet = Math.floor(data.heightInches / 12);
       const inches = data.heightInches % 12;
       this.measurementService.setHeight(feet, inches);
+
+      this.importProgressSubject.next(80);
       
-      // Replace all measurements
-      this.measurementService.replaceMeasurements(data.measurements);
+      // Replace all data
+      this.measurementService.replaceAllData(data.bodyMeasurements, data.weightEntries);
 
       this.importProgressSubject.next(100);
 
@@ -124,9 +138,35 @@ export class DataTransferService {
       data &&
       typeof data.version === 'string' &&
       typeof data.exportDate === 'string' &&
-      Array.isArray(data.measurements) &&
+      Array.isArray(data.bodyMeasurements) &&
+      Array.isArray(data.weightEntries) &&
       (data.weightUnit === 'kg' || data.weightUnit === 'lb') &&
-      typeof data.heightInches === 'number'
+      typeof data.heightInches === 'number' &&
+      // Validate array structures
+      this.isValidBodyMeasurementsArray(data.bodyMeasurements) &&
+      this.isValidWeightEntriesArray(data.weightEntries)
+    );
+  }
+
+  private isValidBodyMeasurementsArray(measurements: any[]): boolean {
+    return measurements.every(m => 
+      typeof m.date === 'string' &&
+      typeof m.neck === 'number' &&
+      typeof m.upperArm === 'number' &&
+      typeof m.chest === 'number' &&
+      typeof m.waist === 'number' &&
+      typeof m.hips === 'number' &&
+      typeof m.wrist === 'number' &&
+      typeof m.thighs === 'number' &&
+      typeof m.calves === 'number' &&
+      typeof m.ankles === 'number'
+    );
+  }
+
+  private isValidWeightEntriesArray(entries: any[]): boolean {
+    return entries.every(e => 
+      typeof e.date === 'string' &&
+      typeof e.weight === 'number'
     );
   }
 }

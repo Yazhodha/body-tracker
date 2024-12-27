@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MeasurementService } from '../../services/measurement.service';
-import { Measurement } from '../../models/measurement';
 import { EditMeasurementDialogComponent } from '../edit-measurement-dialog/edit-measurement-dialog.component';
+import { BodyMeasurement } from 'src/app/models/measurement';
 
 @Component({
   selector: 'app-measurement-table',
@@ -25,7 +25,7 @@ export class MeasurementTableComponent implements OnInit {
     'actions'
   ];
   
-  dataSource = new MatTableDataSource<Measurement>();
+  dataSource = new MatTableDataSource<BodyMeasurement>();
 
   constructor(
     private measurementService: MeasurementService,
@@ -33,17 +33,18 @@ export class MeasurementTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.measurementService.getMeasurements().subscribe(measurements => {
-      // Filter out weight-only entries
-      const bodyMeasurements = measurements.filter(m => this.hasMeasurements(m));
-      
-      this.dataSource.data = bodyMeasurements.sort((a, b) => 
+    this.loadMeasurements();
+  }
+
+  private loadMeasurements(): void {
+    this.measurementService.getBodyMeasurements().subscribe(measurements => {
+      this.dataSource.data = measurements.sort((a, b) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       );
     });
   }
 
-  editMeasurement(measurement: Measurement): void {
+  editMeasurement(measurement: BodyMeasurement): void {
     const dialogRef = this.dialog.open(EditMeasurementDialogComponent, {
       width: '800px',
       data: { ...measurement }
@@ -51,14 +52,14 @@ export class MeasurementTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.measurementService.updateMeasurement(result);
+        this.measurementService.updateBodyMeasurement(result);
       }
     });
   }
 
   deleteMeasurement(id: number): void {
     if (confirm('Are you sure you want to delete this measurement?')) {
-      this.measurementService.deleteMeasurement(id);
+      this.measurementService.deleteBodyMeasurement(id);
     }
   }
 
@@ -67,7 +68,7 @@ export class MeasurementTableComponent implements OnInit {
   }
 
   // Helper method to check if a measurement entry has any body measurements
-  hasMeasurements(measurement: Measurement): boolean {
+  hasMeasurements(measurement: BodyMeasurement): boolean {
     return Boolean(
       measurement.neck ||
       measurement.upperArm ||

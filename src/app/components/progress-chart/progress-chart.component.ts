@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MeasurementService, WeightUnit } from '../../services/measurement.service';
-import { Chart, ChartConfiguration } from 'chart.js';
+import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { WeightEntry } from '../../models/weight-entry';
+import { BodyMeasurement } from 'src/app/models/measurement';
 
 @Component({
   selector: 'app-progress-chart',
@@ -14,6 +16,8 @@ export class ProgressChartComponent implements OnInit {
   @ViewChild('bodyChart') bodyChart?: BaseChartDirective;
 
   currentUnit: WeightUnit = 'kg';
+  weightEntries: WeightEntry[] = [];
+  bodyMeasurements: BodyMeasurement[] = [];
 
   weightChartData: ChartConfiguration<'line'>['data'] = {
     datasets: [],
@@ -103,9 +107,19 @@ export class ProgressChartComponent implements OnInit {
       this.updateWeightChart();
     });
 
-    this.loadChartData();
-    this.measurementService.getMeasurements().subscribe(() => {
-      this.loadChartData();
+    // Subscribe to both data sources
+    this.measurementService.getWeightEntries().subscribe(entries => {
+      this.weightEntries = entries;
+      if (this.chartType === 'weight') {
+        this.updateWeightChart();
+      }
+    });
+
+    this.measurementService.getBodyMeasurements().subscribe(measurements => {
+      this.bodyMeasurements = measurements;
+      if (this.chartType === 'measurements') {
+        this.updateBodyChart();
+      }
     });
   }
 
@@ -124,70 +138,62 @@ export class ProgressChartComponent implements OnInit {
 
   private updateWeightChart(): void {
     this.updateChartYAxisLabel();
-    this.measurementService.getMeasurements().subscribe(measurements => {
-      if (measurements.length === 0) return;
+    
+    if (this.weightEntries.length === 0) return;
 
-      const sortedMeasurements = measurements.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
+    const sortedEntries = [...this.weightEntries].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
-      const labels = sortedMeasurements.map(m => 
-        new Date(m.date).toLocaleDateString()
-      );
+    const labels = sortedEntries.map(m => 
+      new Date(m.date).toLocaleDateString()
+    );
 
-      this.weightChartData = {
-        labels,
-        datasets: [{
-          label: 'Weight',
-          data: sortedMeasurements.map(m => {
-            const weightInKg = m.weight;
-            return this.currentUnit === 'lb' 
-              ? this.measurementService.convertWeight(weightInKg, 'kg', 'lb')
-              : weightInKg;
-          }),
-          borderColor: '#FF9800',
-          backgroundColor: '#FF9800',
-          tension: 0.4
-        }]
-      };
+    this.weightChartData = {
+      labels,
+      datasets: [{
+        label: 'Weight',
+        data: sortedEntries.map(m => {
+          const weightInKg = m.weight;
+          return this.currentUnit === 'lb' 
+            ? this.measurementService.convertWeight(weightInKg, 'kg', 'lb')
+            : weightInKg;
+        }),
+        borderColor: '#FF9800',
+        backgroundColor: '#FF9800',
+        tension: 0.4
+      }]
+    };
 
-      this.weightChart?.update();
-    });
+    this.weightChart?.update();
   }
 
   private updateBodyChart(): void {
-    this.measurementService.getMeasurements().subscribe(measurements => {
-      if (measurements.length === 0) return;
+    if (this.bodyMeasurements.length === 0) return;
 
-      const sortedMeasurements = measurements.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      );
+    const sortedMeasurements = [...this.bodyMeasurements].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
-      const labels = sortedMeasurements.map(m => 
-        new Date(m.date).toLocaleDateString()
-      );
+    const labels = sortedMeasurements.map(m => 
+      new Date(m.date).toLocaleDateString()
+    );
 
-      this.bodyChartData = {
-        labels,
-        datasets: this.selectedMeasurements.map(measurementType => {
-          const measurementInfo = this.bodyMeasurementTypes.find(m => m.id === measurementType)!;
-          return {
-            label: measurementInfo.name,
-            data: sortedMeasurements.map(m => m[measurementType as keyof typeof m] as number),
-            borderColor: measurementInfo.color,
-            backgroundColor: measurementInfo.color,
-            tension: 0.4
-          };
-        })
-      };
+    this.bodyChartData = {
+      labels,
+      datasets: this.selectedMeasurements.map(measurementType => {
+        const measurementInfo = this.bodyMeasurementTypes.find(m => m.id === measurementType)!;
+        return {
+          label: measurementInfo.name,
+          data: sortedMeasurements.map(m => m[measurementType as keyof typeof m] as number),
+          borderColor: measurementInfo.color,
+          backgroundColor: measurementInfo.color,
+          tension: 0.4
+        };
+      })
+    };
 
-      this.bodyChart?.update();
-    });
-  }
-
-  loadChartData(): void {
-    this.updateWeightChart();
-    this.updateBodyChart();
+    this.bodyChart?.update();
   }
 
   toggleMeasurement(measurementId: string): void {
@@ -197,7 +203,6 @@ export class ProgressChartComponent implements OnInit {
     } else {
       this.selectedMeasurements.splice(index, 1);
     }
-    // Only update body measurements chart
     this.updateBodyChart();
   }
 
