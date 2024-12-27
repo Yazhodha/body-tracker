@@ -1,0 +1,37 @@
+<mat-card class="data-transfer-card">
+    <mat-card-header>
+      <mat-card-title>Data Management</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="button-container">
+        <button mat-raised-button color="primary" (click)="exportData()" [disabled]="isProcessing">
+          <mat-icon>download</mat-icon>
+          Export Data
+        </button>
+        
+        <button mat-raised-button color="primary" (click)="fileInput.click()" [disabled]="isProcessing">
+          <mat-icon>upload</mat-icon>
+          Import Data
+        </button>
+        <input
+          #fileInput
+          type="file"
+          accept=".json"
+          style="display: none"
+          (change)="importData($event)"
+        >
+      </div>
+
+      <mat-progress-bar
+        *ngIf="importProgress > 0"
+        mode="determinate"
+        [value]="importProgress"
+      ></mat-progress-bar>
+      
+      <mat-progress-bar
+        *ngIf="exportProgress > 0"
+        mode="determinate"
+        [value]="exportProgress"
+      ></mat-progress-bar>
+    </mat-card-content>
+  </mat-card>

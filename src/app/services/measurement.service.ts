@@ -128,6 +128,15 @@ export class MeasurementService {
     this.saveMeasurements();
   }
 
+  replaceMeasurements(measurements: Measurement[]): void {
+    this.measurements = measurements.map(m => ({
+      ...m,
+      date: new Date(m.date),
+      id: m.id || Date.now()
+    }));
+    this.saveMeasurements();
+  }
+
   private saveMeasurements(): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.measurements));
     this.measurementsSubject.next(this.measurements);

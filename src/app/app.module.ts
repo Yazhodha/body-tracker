@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,6 +27,7 @@ import { EditMeasurementDialogComponent } from './components/edit-measurement-di
 import { HeightSettingsComponent } from './components/height-settings/height-settings.component';
 import { WeightUnitToggleComponent } from './components/weight-unit-toggle/weight-unit-toggle.component';
 import { WeightTrackingComponent } from './components/weight-tracking/weight-tracking.component';
+import { DataTransferComponent } from './components/data-transfer/data-transfer.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { WeightTrackingComponent } from './components/weight-tracking/weight-tra
     EditMeasurementDialogComponent,
     HeightSettingsComponent,
     WeightUnitToggleComponent,
-    WeightTrackingComponent
+    WeightTrackingComponent,
+    DataTransferComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +58,8 @@ import { WeightTrackingComponent } from './components/weight-tracking/weight-tra
     MatIconModule,
     MatButtonToggleModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
